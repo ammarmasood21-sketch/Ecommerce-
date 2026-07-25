@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ammar's Shopping | Luxury Interactive Shopping Experience</title>
+  <meta name="description" content="Experience shopping in a new dimension. Explore luxury watches, perfumes, athletic joggers, shirts, pants, ladies clothing, and daily products with interactive 3D elements.">
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body class="theme-perfume">
+
+  <!-- Interactive Cursor Glow (Desktop Only) -->
+  <div id="cursor-glow" class="cursor-glow"></div>
+  <div id="cursor-dot" class="cursor-dot"></div>
+
+  <!-- Header & Navigation -->
+  <header id="main-header" class="main-header">
+    <div class="header-container">
+      <a href="#" class="logo">
+        <span class="logo-accent">Ammar's</span><span class="logo-light">Shopping</span>
+      </a>
+      
+      <nav class="nav-links">
+        <a href="#" class="nav-link active" data-sec="home">Home</a>
+        <a href="#products-section" class="nav-link" data-sec="products">Products</a>
+        <a href="#about-section" class="nav-link" data-sec="about">About</a>
+        <a href="#contact-section" class="nav-link" data-sec="contact">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <button id="cart-toggle-btn" class="cart-toggle-btn" aria-label="Open Cart">
+          <svg class="cart-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          <span class="cart-text">Cart</span>
+          <span id="cart-count-badge" class="cart-count-badge">0</span>
+        </button>
+        <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle Navigation Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Drawer -->
+  <div id="mobile-drawer" class="mobile-drawer">
+    <div class="drawer-header">
+      <div class="logo">Ammar's<span>Shopping</span></div>
+      <button id="drawer-close" class="drawer-close" aria-label="Close menu">&times;</button>
+    </div>
+    <nav class="mobile-nav-links">
+      <a href="#" class="mobile-link">Home</a>
+      <a href="#products-section" class="mobile-link">Products</a>
+      <a href="#about-section" class="mobile-link">About Us</a>
+      <a href="#contact-section" class="mobile-link">Contact</a>
+    </nav>
+  </div>
+
+  <!-- Hero Section -->
+  <section id="hero-section" class="hero-section">
+    <div class="hero-container">
+      
+      <!-- Left Details (Dynamic content changed by JS) -->
+      <div class="hero-details-left" id="hero-details-left">
+        <span class="product-category-tag" id="hero-category">Exquisite Fragrance</span>
+        <h1 class="product-main-title" id="hero-title">AURA <span class="gradient-text">ELIXIR</span></h1>
+        <p class="product-description" id="hero-desc">
+          Indulge in the luxury of pure sensory delight. Crafted with delicate floral extracts and dark amber undertones, it is designed for the modern trendsetter.
+        </p>
+        <div class="product-price-wrapper">
+          <span class="price-label">Price</span>
+          <span class="product-price" id="hero-price">$89.00</span>
+        </div>
+        <div class="hero-actions-row">
+          <button id="hero-add-to-cart" class="btn btn-primary btn-glow">
+            Add to Cart
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-8.9-5h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01-1.74-1L15.55 11H8.53L4.27 2H1v2h2l3.6 7.59-1.35 2.44C4.52 15.37 5.48 17 7 17h12v-2H7l1.1-2z"/>
+            </svg>
+          </button>
+          <a href="#products-section" class="btn btn-secondary">Explore Variants</a>
+        </div>
+      </div>
+
+      <!-- Center 3D Interactive Stage -->
+      <div class="hero-3d-stage" id="hero-3d-stage">
+        <!-- Floating Volumetric Lights -->
+        <div class="orbs-container">
+          <div class="light-orb orb-1"></div>
+          <div class="light-orb orb-2"></div>
+        </div>
+        
+        <!-- Interactive 3D Canvas -->
+        <div class="canvas-3d-wrapper" id="canvas-3d-wrapper">
+          <!-- Glassmorphic stage base -->
+          <div class="stage-pedestal"></div>
+          <!-- Canvas will be appended here by ThreeJS -->
+        </div>
+
+        <!-- Floating 3D Slides Wrapper for Product Photos -->
+        <div class="hero-slides-wrapper" id="hero-slides-wrapper">
+          <div class="hero-slide-card slide-active">
+            <img src="images/perfume_1.png" alt="Product Image">
+          </div>
+        </div>
+
+        <!-- Slideshow Controls -->
+        <button id="hero-slide-prev" class="slide-ctrl-btn ctrl-prev" aria-label="Previous Product">
+          <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+        </button>
+        <button id="hero-slide-next" class="slide-ctrl-btn ctrl-next" aria-label="Next Product">
+          <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+        </button>
+
+        <!-- Slideshow Autoplay Progress Indicator -->
+        <div class="slideshow-progress-bar">
+          <div id="slideshow-progress-fill" class="progress-fill"></div>
+        </div>
+
+        <!-- Pop-out UI elements that translate on mouse move -->
+        <div class="popout-badge badge-top-right" id="popout-badge-1">
+          <div class="badge-content">
+            <span class="badge-icon">★</span>
+            <span class="badge-text">4.9 (1,240 reviews)</span>
+          </div>
+        </div>
+        
+        <div class="popout-badge badge-bottom-left" id="popout-badge-2">
+          <div class="badge-content">
+            <span class="badge-icon">✦</span>
+            <span class="badge-text">100% Vegan & Pure</span>
+          </div>
+        </div>
+
+        <div class="floating-hint">Drag to Rotate in 3D</div>
+      </div>
+
+      <!-- Right Details (Dynamic specifications & color switcher) -->
+      <div class="hero-details-right" id="hero-details-right">
+        <div class="spec-group">
+          <h3 class="spec-title">Product Details</h3>
+          <ul class="spec-list" id="hero-specs">
+            <li><strong>Origin:</strong> Grasse, France</li>
+            <li><strong>Longevity:</strong> 12+ Hours</li>
+            <li><strong>Concentration:</strong> Eau de Parfum</li>
+            <li><strong>Notes:</strong> Jasmin, Amberwood, Saffron</li>
+          </ul>
+        </div>
+
+        <div class="swatch-group">
+          <h3 class="spec-title">Theme Options</h3>
+          <div class="color-swatches" id="color-swatches">
+            <button class="swatch active" data-color="gold" style="background: linear-gradient(135deg, #e5c07b, #c19c53);" title="Amber Gold"></button>
+            <button class="swatch" data-color="ruby" style="background: linear-gradient(135deg, #e06c75, #be5046);" title="Ruby Rose"></button>
+            <button class="swatch" data-color="sapphire" style="background: linear-gradient(135deg, #61afef, #4078c0);" title="Sapphire Breeze"></button>
+            <button class="swatch" data-color="emerald" style="background: linear-gradient(135deg, #98c379, #6d964f);" title="Emerald Forest"></button>
+          </div>
+        </div>
+
+        <!-- 3D popping helper indicator -->
+        <div class="hologram-grid"></div>
+      </div>
+
+    </div>
+
+    <!-- Quick Navigation Sub-Product Buttons -->
+    <div class="quick-nav-container">
+      <div class="quick-nav-label">Select Collection:</div>
+      <div class="quick-nav-buttons">
+        <button class="q-btn active" data-prod="perfume">
+          <span class="q-icon">🧴</span> Perfumes
+        </button>
+        <button class="q-btn" data-prod="watch">
+          <span class="q-icon">⌚</span> Watches
+        </button>
+        <button class="q-btn" data-prod="joggers">
+          <span class="q-icon">👟</span> Joggers
+        </button>
+        <button class="q-btn" data-prod="shirt">
+          <span class="q-icon">👕</span> Shirts
+        </button>
+        <button class="q-btn" data-prod="pants">
+          <span class="q-icon">👖</span> Pants
+        </button>
+        <button class="q-btn" data-prod="ladies_dress">
+          <span class="q-icon">👗</span> Ladies Wear
+        </button>
+        <button class="q-btn" data-prod="ladies_daily">
+          <span class="q-icon">💄</span> Ladies Care
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section id="products-section" class="products-section">
+    <div class="section-header">
+      <span class="section-subtitle">Our Curated Catalog</span>
+      <h2 class="section-title">Explore <span class="gradient-text">Categories</span></h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- Category Grid & Sub-product buttons -->
+    <div class="catalog-container">
+      
+      <!-- Filter Controls -->
+      <div class="catalog-filters">
+        <button class="filter-btn active" data-filter="all">All Products</button>
+        <button class="filter-btn" data-filter="perfume">Perfumes</button>
+        <button class="filter-btn" data-filter="watch">Watches</button>
+        <button class="filter-btn" data-filter="joggers">Joggers</button>
+        <button class="filter-btn" data-filter="shirt">Shirts</button>
+        <button class="filter-btn" data-filter="pants">Pants</button>
+        <button class="filter-btn" data-filter="ladies_dress">Ladies Wear</button>
+        <button class="filter-btn" data-filter="ladies_daily">Ladies Care</button>
+      </div>
+
+      <!-- Sub-Category Pill Selector (Dynamic filters matching user's requested extra products) -->
+      <div class="sub-filter-container" id="sub-filter-container">
+        <!-- Rendered dynamically by script.js based on selected category -->
+      </div>
+
+      <!-- Product Cards Grid -->
+      <div class="products-grid" id="products-grid">
+        <!-- Cards will be populated dynamically by script.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- About Us Section -->
+  <section id="about-section" class="about-section">
+    <div class="about-bg-elements">
+      <div class="glow-sphere sphere-1"></div>
+      <div class="glow-sphere sphere-2"></div>
+    </div>
+
+    <div class="about-container">
+      <div class="about-content">
+        <span class="section-subtitle">Our Heritage</span>
+        <h2 class="section-title">Redefining Digital <span class="gradient-text">Elegance</span></h2>
+        <p class="about-text">
+          AURA 3D represents the intersection of luxury design and web innovation. Our goal is to bring the physical showroom experience directly to your browser. Utilizing cutting-edge WebGL graphics and interactive volumetric materials, we allow you to inspect every stitch, case detail, and fragrance bottle facet.
+        </p>
+        <p class="about-text">
+          Every item is handpicked, ethically sourced, and designed to inspire confidence, sophistication, and modernity in your daily routine.
+        </p>
+        
+        <!-- Stats Counter Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h3 class="stat-number" data-target="50">0k+</h3>
+            <p class="stat-label">Happy Clients</p>
+          </div>
+          <div class="stat-card">
+            <h3 class="stat-number" data-target="120">0+</h3>
+            <p class="stat-label">Luxury Items</p>
+          </div>
+          <div class="stat-card">
+            <h3 class="stat-number" data-target="99">0%</h3>
+            <p class="stat-label">Satisfaction Rate</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- About Us Side Visual - 3D Popout Card -->
+      <div class="about-visual">
+        <div class="about-tilt-wrapper" id="about-tilt">
+          <div class="about-visual-card">
+            <div class="glass-overlay"></div>
+            <div class="card-inner-details">
+              <span class="year-badge">Est. 2026</span>
+              <h3>Craftsmanship & Technology</h3>
+              <p>Creating three-dimensional design systems that defy expectations.</p>
+            </div>
+            <!-- Floating element popping out of screen -->
+            <div class="floating-card-ring"></div>
+            <div class="floating-card-sphere"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Us Section -->
+  <section id="contact-section" class="contact-section">
+    <div class="section-header">
+      <span class="section-subtitle">Get In Touch</span>
+      <h2 class="section-title">Connect With <span class="gradient-text">Ammar's</span></h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="contact-container">
+      <!-- Contact Form -->
+      <div class="contact-form-panel">
+        <h3 class="panel-heading">Send a Message</h3>
+        <form id="contact-form" class="contact-form" novalidate>
+          <div class="form-group">
+            <input type="text" id="contact-name" class="form-input" placeholder=" " required>
+            <label for="contact-name" class="form-label">Full Name</label>
+            <span class="input-focus-line"></span>
+          </div>
+
+          <div class="form-group">
+            <input type="email" id="contact-email" class="form-input" placeholder=" " required>
+            <label for="contact-email" class="form-label">Email Address</label>
+            <span class="input-focus-line"></span>
+          </div>
+
+          <div class="form-group">
+            <textarea id="contact-message" class="form-input form-textarea" placeholder=" " required></textarea>
+            <label for="contact-message" class="form-label">Your Message</label>
+            <span class="input-focus-line"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-glow btn-full">
+            Submit Message
+            <span class="btn-icon">⚡</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Map & Details Panel -->
+      <div class="contact-details-panel">
+        <!-- Styled Custom Interactive Map Mockup -->
+        <div class="map-wrapper">
+          <div class="map-title-bar">
+            <div class="map-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+            <span class="map-loc-label">Ammar's Headquarter Radar - New York</span>
+          </div>
+          <!-- Styled Map Canvas / SVG mockup -->
+          <div class="map-canvas-container" id="map-canvas-container">
+            <canvas id="styled-map-canvas"></canvas>
+            <div class="map-overlay-hud">
+              <span class="pulse-pin"></span>
+              <div class="hud-box">
+                <h4>AMMAR'S HQ</h4>
+                <p>42 Fifth Ave, NY</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact info -->
+        <div class="info-items">
+          <div class="info-item">
+            <div class="info-icon">📍</div>
+            <div class="info-content">
+              <h4>Flagship Address</h4>
+              <p>42 Fifth Ave, Midtown Manhattan, New York, NY 10011</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">📞</div>
+            <div class="info-content">
+              <h4>Customer Concierge</h4>
+              <p>+1 (800) 555-AMMAR (2662) | Mon - Fri, 9am - 6pm EST</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">✉️</div>
+            <div class="info-content">
+              <h4>Direct Inquiries</h4>
+              <p>concierge@ammars-shopping.com</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shopping Cart Drawer Overlay -->
+  <div id="cart-overlay" class="cart-overlay"></div>
+  
+  <!-- Shopping Cart Drawer -->
+  <div id="cart-drawer" class="cart-drawer">
+    <div class="cart-header">
+      <h3>Your Bag (<span id="cart-drawer-count">0</span>)</h3>
+      <button id="cart-close-btn" class="cart-close-btn" aria-label="Close Cart">&times;</button>
+    </div>
+    
+    <div id="cart-items-container" class="cart-items-container">
+      <!-- Items will be injected by script.js -->
+      <div class="empty-cart-message">
+        <span class="empty-cart-icon">🛒</span>
+        <p>Your shopping bag is empty.</p>
+        <a href="#products-section" class="btn btn-secondary btn-sm" id="empty-cart-browse">Browse Products</a>
+      </div>
+    </div>
+    
+    <div class="cart-footer">
+      <div class="cart-subtotal-row">
+        <span>Subtotal</span>
+        <span id="cart-subtotal-price" class="subtotal-price">$0.00</span>
+      </div>
+      <p class="cart-shipping-note">Taxes and premium insured shipping calculated at checkout.</p>
+      <button id="checkout-btn" class="btn btn-primary btn-glow btn-full">
+        Proceed to Secure Checkout
+      </button>
+    </div>
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-container">
+      <div class="footer-brand-column">
+        <div class="logo">Ammar's<span>Shopping</span></div>
+        <p class="footer-about">
+          A premium digital shopping experience showcasing the pinnacle of fashion, cosmetics, and accessories using dynamic 3D technology.
+        </p>
+        <div class="social-links">
+          <a href="#" class="social-link" aria-label="Instagram">IG</a>
+          <a href="#" class="social-link" aria-label="Twitter">TW</a>
+          <a href="#" class="social-link" aria-label="Pinterest">PI</a>
+          <a href="#" class="social-link" aria-label="LinkedIn">LI</a>
+        </div>
+      </div>
+
+      <div class="footer-links-column">
+        <h4>Collections</h4>
+        <ul>
+          <li><a href="#" class="footer-action-link" data-prod="perfume">Perfumes</a></li>
+          <li><a href="#" class="footer-action-link" data-prod="watch">Luxury Watches</a></li>
+          <li><a href="#" class="footer-action-link" data-prod="joggers">Sportwear Joggers</a></li>
+          <li><a href="#" class="footer-action-link" data-prod="shirt">Casual Shirts</a></li>
+          <li><a href="#" class="footer-action-link" data-prod="pants">Tailored Pants</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links-column">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#about-section">About Us</a></li>
+          <li><a href="#contact-section">Contact Concierge</a></li>
+          <li><a href="#">Size Guides</a></li>
+          <li><a href="#">Shipping & Returns</a></li>
+          <li><a href="#">FAQ Portal</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-newsletter-column">
+        <h4>Newsletter</h4>
+        <p>Subscribe to receive early access releases and private 3D showcase links.</p>
+        <form id="newsletter-form" class="newsletter-form">
+          <input type="email" placeholder="Enter your email" required class="newsletter-input">
+          <button type="submit" class="newsletter-btn" aria-label="Subscribe">→</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 Ammar's Shopping Inc. All rights reserved. Created in partnership with Antigravity AI.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- App Main Scripts -->
+  <script src="script.js"></script>
+  <script src="three-app.js"></script>
+</body>
+</html>
