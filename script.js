@@ -1085,20 +1085,21 @@ function initRadarMap() {
 
   const ctx = canvas.getContext('2d');
   let width, height;
+  let hqX, hqY;
 
   const resize = () => {
     width = container.clientWidth;
     height = container.clientHeight;
     canvas.width = width;
     canvas.height = height;
+    hqX = width / 2;
+    hqY = height / 2;
   };
   resize();
   window.addEventListener('resize', resize);
 
   // Radar variables
   let sweepAngle = 0;
-  const hqX = width / 2;
-  const hqY = height / 2;
 
   // Particle dots (representing cities/nodes)
   const nodes = [
@@ -1106,7 +1107,7 @@ function initRadarMap() {
     { x: width * 0.75, y: height * 0.25, label: "Tokyo link", active: false },
     { x: width * 0.3, y: height * 0.7, label: "Paris relay", active: false },
     { x: width * 0.65, y: height * 0.75, label: "Sydney port", active: false },
-    { x: width * 0.5, y: height * 0.5, label: "AURA HQ", active: true } // Center
+    { x: width * 0.5, y: height * 0.5, label: "AMMAR'S HQ", active: true } // Center
   ];
 
   // Coordinates matrix falling text
@@ -1175,7 +1176,7 @@ function initRadarMap() {
       if (node.label === "Tokyo link") { node.x = width * 0.75; node.y = height * 0.25; }
       if (node.label === "Paris relay") { node.x = width * 0.3; node.y = height * 0.7; }
       if (node.label === "Sydney port") { node.x = width * 0.65; node.y = height * 0.75; }
-      if (node.label === "AURA HQ") { node.x = width / 2; node.y = height / 2; }
+      if (node.label === "AMMAR'S HQ") { node.x = width / 2; node.y = height / 2; }
 
       // Check distance to sweep beam to light up node
       const angleToNode = Math.atan2(node.y - hqY, node.x - hqX);
@@ -1191,11 +1192,11 @@ function initRadarMap() {
 
       ctx.fillStyle = node.active ? accentStyle : 'rgba(255, 255, 255, 0.3)';
       ctx.beginPath();
-      ctx.arc(node.x, node.y, node.label === "AURA HQ" ? 5 : 3, 0, Math.PI * 2);
+      ctx.arc(node.x, node.y, node.label === "AMMAR'S HQ" ? 5 : 3, 0, Math.PI * 2);
       ctx.fill();
 
       // Ripple around HQ
-      if (node.label === "AURA HQ") {
+      if (node.label === "AMMAR'S HQ") {
         ctx.strokeStyle = accentStyle;
         ctx.globalAlpha = intensity * 0.4;
         ctx.beginPath();
